@@ -68,27 +68,27 @@ module.exports = {
       },
       digit_one: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
       },
       digit_two: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
       },
       digit_three: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
       },
       digit_four: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
       },
       digit_five: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
       },
       digit_six: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(2),
       },
       profit: {
         allowNull: false,
