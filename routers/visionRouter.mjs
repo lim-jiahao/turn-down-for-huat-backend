@@ -34,8 +34,12 @@ const checkTicket = async (req, res) => {
     }
 
     const draw = drawNum[0].split('/')[0];
-    const bets = numbers.map((bet) => bet.split(' '));
-    res.json({ draw, bets });
+    const bets = numbers.map((bet) => bet.replaceAll(' ', ','));
+    res.json({
+      draw,
+      bets,
+      ticket: req.file.filename,
+    });
   } catch (error) { res.status(503).send({ error }); }
 };
 
