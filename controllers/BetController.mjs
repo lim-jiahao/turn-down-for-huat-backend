@@ -4,20 +4,12 @@ import BaseController from './BaseController.mjs';
 export default class BetController extends BaseController {
   // eslint-disable-next-line class-methods-use-this
   async check(req, res) {
-    const { numbersChecked } = req.body;
-    const numbers = numbersChecked.reduce((acc, cur, i) => {
-      if (cur) {
-        if (i + 1 < 10) return `${acc},0${i + 1}`;
-        return `${acc},${i + 1}`;
-      }
-      return acc;
-    },
-    '').slice(1);
+    const { bet, draw } = req.body;
 
     const data = {
-      drawNumber: '3740',
+      drawNumber: draw,
       isHalfBet: 'false',
-      numbers,
+      numbers: bet,
       partsPurchased: '1',
       totalNumberOfParts: '1',
     };
@@ -29,7 +21,6 @@ export default class BetController extends BaseController {
         winningNumbers: info.WinningNumbers.join(','),
         prize: info.Prizes.length > 0 ? Number(info.Prizes[0].Total) : 0,
         additionalNumber: info.AdditionalNumber,
-        numbers,
       };
       res.send(respData);
     } catch (error) {
@@ -38,28 +29,34 @@ export default class BetController extends BaseController {
   }
 
   async save(req, res) {
-    const { numbers, prize } = req.body;
+    const { numbers, prizes, filename } = req.body;
     const { id } = req.userInfo;
     try {
       const ticket = await this.db.Ticket.create({
-        filename: 'abc',
+        filename,
         userId: id,
       });
 
-      const [digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix] = numbers.split(',');
-
-      const bet = await this.model.create({
-        digitOne,
-        digitTwo,
-        digitThree,
-        digitFour,
-        digitFive,
-        digitSix,
-        profit: prize,
-        ticketId: ticket.id,
+      const promises = [];
+      numbers.forEach((set, i) => {
+        const [digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix] = set.split(',');
+        promises.push(this.model.create({
+          digitOne,
+          digitTwo,
+          digitThree,
+          digitFour,
+          digitFive,
+          digitSix,
+          profit: prizes[i],
+          ticketId: ticket.id,
+        }));
       });
 
-      res.json({ bet });
+      const bets = await Promise.all(promises);
+      const winLoss = bets.reduce((acc, cur) => acc + Number(cur.profit) - 1, 0);
+      console.log(bets, winLoss);
+
+      res.json({ bets, winLoss });
     } catch (error) {
       res.status(503).send({ error });
     }

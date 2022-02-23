@@ -14,6 +14,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('public'));
+app.use(express.static('uploads'));
 app.use(cors({
   credentials: true,
   origin: FRONTEND_URL,
