@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import moment from 'moment';
 import vision from '@google-cloud/vision';
 
 const router = express.Router();
@@ -25,16 +26,20 @@ const checkTicket = async (req, res) => {
     }
 
     const drawNum = text.match(/[0-9]{4}[/][0-9]{2}/g);
-
     if (!drawNum || drawNum.length === 0) {
       res.status(400).json({ error: 'No draw number found!' });
       return;
     }
 
     const numbers = text.match(/\d{2}\s\d{2}\s\d{2}\s\d{2}\s\d{2}\s\d{2}/g);
-
     if (!numbers || numbers.length === 0) {
       res.status(400).json({ error: 'No bet numbers found!' });
+      return;
+    }
+
+    const date = text.match(/\d{2}[/]\d{2}[/]\d{2}/g);
+    if (!date) {
+      res.status(400).json({ error: 'No draw date found!' });
       return;
     }
 
@@ -43,6 +48,7 @@ const checkTicket = async (req, res) => {
     res.json({
       draw,
       bets,
+      date: moment(date, 'DD/MM/YY').format('dddd, MMMM Do YYYY'),
       ticket: req.file.filename,
     });
   } catch (error) { res.status(503).send({ error }); }
