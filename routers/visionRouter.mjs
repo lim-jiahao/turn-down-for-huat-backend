@@ -17,7 +17,12 @@ const client = new vision.ImageAnnotatorClient({
 const checkTicket = async (req, res) => {
   try {
     const [result] = await client.textDetection(`uploads/${req.file.filename}`);
-    const { text } = result.fullTextAnnotation;
+    const text = result.fullTextAnnotation?.text;
+
+    if (!text) {
+      res.status(400).json({ error: 'No text detected!' });
+      return;
+    }
 
     const drawNum = text.match(/[0-9]{4}[/][0-9]{2}/g);
 
