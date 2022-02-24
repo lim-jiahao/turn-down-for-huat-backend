@@ -17,6 +17,11 @@ export default class BetController extends BaseController {
       const results = await axios.post('https://www.singaporepools.com.sg/_layouts/15/TotoApplication/TotoCommonPage.aspx/CalculatePrizeForTOTO', data);
       const info = JSON.parse(results.data.d);
 
+      if (!info.WinningNumbers || info.WinningNumbers.length === 0) {
+        res.status(400).json({ error: 'Results not out yet for this draw!' });
+        return;
+      }
+
       const respData = {
         winningNumbers: info.WinningNumbers.join(','),
         prize: info.Prizes.length > 0 ? Number(info.Prizes[0].Total) : 0,
