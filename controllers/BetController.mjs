@@ -47,9 +47,21 @@ export default class BetController extends BaseController {
         userId: id,
       });
 
+      const costs = {
+        6: 1,
+        7: 7,
+        8: 28,
+        9: 84,
+        10: 210,
+        11: 462,
+        12: 924,
+      };
+
       const promises = [];
       numbers.forEach((set, i) => {
-        const [digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix] = set.split(',');
+        const numberArr = set.split(',');
+        const [digitOne, digitTwo, digitThree, digitFour, digitFive, digitSix,
+          digitSeven, digitEight, digitNine, digitTen, digitEleven, digitTwelve] = numberArr;
         promises.push(this.model.create({
           digitOne,
           digitTwo,
@@ -57,14 +69,20 @@ export default class BetController extends BaseController {
           digitFour,
           digitFive,
           digitSix,
+          digitSeven,
+          digitEight,
+          digitNine,
+          digitTen,
+          digitEleven,
+          digitTwelve,
           profit: prizes[i],
+          cost: costs[numberArr.length],
           ticketId: ticket.id,
         }));
       });
 
       const bets = await Promise.all(promises);
-      const winLoss = bets.reduce((acc, cur) => acc + Number(cur.profit) - 1, 0);
-      console.log(bets, winLoss);
+      const winLoss = bets.reduce((acc, cur) => acc + Number(cur.profit) - Number(cur.cost), 0);
 
       res.json({ bets, winLoss });
     } catch (error) {

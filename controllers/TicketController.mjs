@@ -14,7 +14,7 @@ export default class TicketController extends BaseController {
 
       tickets.forEach((ticket) => {
         ticket.bets.forEach((bet) => {
-          win += Number(bet.profit) - 1;
+          win += Number(bet.profit) - Number(bet.cost);
         });
       });
 

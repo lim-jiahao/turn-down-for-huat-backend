@@ -90,7 +90,35 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(2),
       },
+      digit_seven: {
+        allowNull: true,
+        type: Sequelize.STRING(2),
+      },
+      digit_eight: {
+        allowNull: true,
+        type: Sequelize.STRING(2),
+      },
+      digit_nine: {
+        allowNull: true,
+        type: Sequelize.STRING(2),
+      },
+      digit_ten: {
+        allowNull: true,
+        type: Sequelize.STRING(2),
+      },
+      digit_eleven: {
+        allowNull: true,
+        type: Sequelize.STRING(2),
+      },
+      digit_twelve: {
+        allowNull: true,
+        type: Sequelize.STRING(2),
+      },
       profit: {
+        allowNull: false,
+        type: Sequelize.DECIMAL(10, 2),
+      },
+      cost: {
         allowNull: false,
         type: Sequelize.DECIMAL(10, 2),
       },

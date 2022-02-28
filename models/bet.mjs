@@ -30,7 +30,35 @@ export default function initBetModel(sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.STRING(2),
     },
+    digitSeven: {
+      allowNull: true,
+      type: DataTypes.STRING(2),
+    },
+    digitEight: {
+      allowNull: true,
+      type: DataTypes.STRING(2),
+    },
+    digitNine: {
+      allowNull: true,
+      type: DataTypes.STRING(2),
+    },
+    digitTen: {
+      allowNull: true,
+      type: DataTypes.STRING(2),
+    },
+    digitEleven: {
+      allowNull: true,
+      type: DataTypes.STRING(2),
+    },
+    digitTwelve: {
+      allowNull: true,
+      type: DataTypes.STRING(2),
+    },
     profit: {
+      allowNull: false,
+      type: DataTypes.DECIMAL(10, 2),
+    },
+    cost: {
       allowNull: false,
       type: DataTypes.DECIMAL(10, 2),
     },
