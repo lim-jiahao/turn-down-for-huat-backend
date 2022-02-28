@@ -26,6 +26,11 @@ const checkTicket = async (req, res) => {
       return;
     }
 
+    if (text.includes('ITOTO') || text.includes('GROUP TOTO')) {
+      res.status(400).json({ error: 'Sorry, iTOTO and Group TOTO tickets are not supported currently!' });
+      return;
+    }
+
     // match 'ORDINARY' or 'SYSTEM 7-12'
     let systemNum;
     const system = text.match(/SYSTEM\s([7-9]|1[0-2])/g);
