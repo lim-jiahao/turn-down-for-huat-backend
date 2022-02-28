@@ -22,9 +22,14 @@ export default class BetController extends BaseController {
         return;
       }
 
+      let prize = 0;
+      if (info.Prizes.length > 0) {
+        prize = info.Prizes.reduce((acc, cur) => acc + cur.Total, 0);
+      }
+
       const respData = {
         winningNumbers: info.WinningNumbers.join(','),
-        prize: info.Prizes.length > 0 ? Number(info.Prizes[0].Total) : 0,
+        prize,
         additionalNumber: info.AdditionalNumber,
       };
       res.send(respData);
