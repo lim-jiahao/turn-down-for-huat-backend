@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import moment from 'moment';
 import BaseController from './BaseController.mjs';
 import getPasswordHash from '../utils/hash.mjs';
 
@@ -58,6 +59,55 @@ export default class UserController extends BaseController {
       const token = jwt.sign(payload, SALT, { expiresIn: '1 day' });
       res.json({ token });
     } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async getUser(req, res) {
+    try {
+      const user = await this.model.findByPk(req.userInfo.id, {
+        include: [
+          {
+            model: this.db.Ticket,
+            include: [
+              {
+                model: this.db.Bet,
+              },
+            ],
+          },
+        ],
+      });
+
+      if (!user) {
+        res.status(401).json({ error: 'An error occured' });
+        return;
+      }
+
+      const tickets = user.tickets.map((ticket) => {
+        const bets = ticket.bets.map((bet) => {
+          let betStr = `${bet.digitOne}, ${bet.digitTwo}, ${bet.digitThree}, ${bet.digitFour}, ${bet.digitFive}, ${bet.digitSix}`;
+          if (bet.digitSeven) betStr += `, ${bet.digitSeven}`;
+          if (bet.digitEight) betStr += `, ${bet.digitEight}`;
+          if (bet.digitNine) betStr += `, ${bet.digitNine}`;
+          if (bet.digitTen) betStr += `, ${bet.digitTen}`;
+          if (bet.digitEleven) betStr += `, ${bet.digitEleven}`;
+          if (bet.digitTwelve) betStr += `, ${bet.digitTwelve}`;
+          return betStr;
+        });
+        const profit = ticket.bets.reduce((acc, cur) => acc + Number(cur.profit), 0);
+        const cost = ticket.bets.reduce((acc, cur) => acc + Number(cur.cost), 0);
+
+        return {
+          bets,
+          profit,
+          cost,
+          filename: ticket.filename,
+          created: moment(ticket.createdAt).format('Do MMM YYYY, h:mm:ss a'),
+        };
+      });
+
+      res.json({ user, tickets });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this

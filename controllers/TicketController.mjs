@@ -1,3 +1,4 @@
+import { rm } from 'fs';
 import BaseController from './BaseController.mjs';
 
 export default class TicketController extends BaseController {
@@ -20,5 +21,34 @@ export default class TicketController extends BaseController {
 
       res.send({ win });
     } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async deletePicture(req, res) {
+    try {
+      const ticket = await this.model.findOne({
+        where: {
+          filename: req.params.filename,
+        },
+      });
+
+      if (!ticket) {
+        res.status(401).json({ error: 'An error occured' });
+        return;
+      }
+
+      await this.db.Bet.destroy({
+        where: {
+          ticketId: ticket.id,
+        },
+      });
+
+      rm(`uploads/${req.params.filename}`, (err) => {
+        if (err) throw err;
+      });
+      await ticket.destroy();
+      res.json({ status: 'success' });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
   }
 }
