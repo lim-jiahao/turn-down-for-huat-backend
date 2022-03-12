@@ -43,7 +43,7 @@ export default class TicketController extends BaseController {
       });
 
       rm(`uploads/${req.params.filename}`, (err) => {
-        if (err) throw err;
+        if (err) console.log(err);
       });
       await ticket.destroy();
       res.json({ status: 'success' });

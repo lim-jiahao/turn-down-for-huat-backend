@@ -1,9 +1,9 @@
 module.exports = {
   development: {
-    username: 'limjiahao',
+    username: process.env.USERNAME,
     password: null,
-    database: 'turn_down_for_huat',
-    host: '127.0.0.1',
+    database: process.env.DATABASE,
+    host: process.env.HOST,
     dialect: 'postgres',
   },
 };
