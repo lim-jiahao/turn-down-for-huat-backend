@@ -3,6 +3,8 @@
 ## Turn Down for Huat?
 Checking results for TOTO (Singapore lottery) is made simple with the help of **Turn Down for Huat**. Upload an image of your ticket and see the results immediately!
 
+This is the backend repo. Frontend repo can be found [here](https://github.com/lim-jiahao/turn-down-for-huat-frontend).
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -131,7 +133,7 @@ Backend
    ```
 6. Run backend
    ```
-   nodemon index.mjs
+   npm start
    ```
 
 Frontend
@@ -145,7 +147,7 @@ Frontend
    ```sh
    npm i
    ```
-4. Run backend
+4. Run frontend
    ```sh
    npm start
    ```
